@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/public/faviconRegister.png"> 
+    <title>Register</title>
+    <style>
+      body {
+        background-size: cover;
+      }
+      .register{
+        font-size: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="register">Register</h1>
+    <form method="post" action="/register">
+      <label for="username">U s e r n a m e : </label
+      ><input type="text" name="username" required/>
+      <label for="password">P a s s w o r d : </label
+      ><input type="password" name="password" required/>
+      <input type="submit" class="submitBtn" value="Register" />
+    </form>
+  </body>
+</html>

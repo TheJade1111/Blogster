@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/public/faviconAuthor.png"> 
+    <style>
+      body{
+        background-size:cover;
+      }
+      .updateHeading{
+        font-size:80px;
+      }
+    </style>
+    <title>Update the post</title>
+</head>
+<body>
+    <h1 class="updateHeading"></h1>
+    <br>
+    <form class="form" method="post" action="/updatePost2" enctype="multipart/form-data">
+        <label for="article">Title: </label><input type="text" class="title" name="title">
+        <br>
+        <label for="article">Article: </label><textarea rows="4" cols="200" class="article" name="article"></textarea>
+        <br>
+        <label for="image">Select new image: </label><input type="file" class="image" name="pic2">
+        <br>
+        <input type="submit" class="updateBtn" value="Update">
+    </form>
+    <script>
+      function fillContent(blog){
+        document.querySelector("h1").innerText="Update blog: "+blog.title;
+        document.querySelector(".title").value=blog.title;
+        document.querySelector(".article").innerText=blog.article;
+      }
+
+        fetch("/getPostToUpdate").then((res)=>{
+          return res.json();
+        }).then((blog)=>{
+          fillContent(blog);
+        })
+    </script>
+</body>
+</html>

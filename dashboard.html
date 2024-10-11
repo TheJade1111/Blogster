@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/public/favicon.png"> 
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <h1 id="welcomeHeading" class="heading"></h1>
+    <h2 id="subText" class="sub-heading"></h2>
+    <div class="buttonDiv">
+      <a href="/logout">LogOut</a>
+    <a href="/upload">Upload</a>
+    </div>
+
+    <script>
+      function sayHello(data) {
+        const h1 = document.querySelector("#welcomeHeading");
+        const h2 = document.querySelector("#subText");
+        h1.textContent = "Welcome to the dashboard, " + data.username+"!";
+        if (data.role == "author") {
+          h2.textContent = "Your Publications";
+        } else if (data.role == "admin") {
+            const createAuthor = document.createElement("a");
+            createAuthor.href="/createAuthor";
+            createAuthor.innerText="Add Author";
+            document.querySelector(".buttonDiv").append(createAuthor);
+          h2.textContent = "Edit or remove any author posts!";
+        }
+      }
+      function showBlogs(dataBlog, user) {
+        let authorPosts;
+        if (user.role != "admin") {
+          authorPosts = dataBlog.filter((val) => {
+            return val.username == user.username;
+          });
+        } else {
+          authorPosts = dataBlog;
+        }
+
+        if(authorPosts.length==0){
+          const h2 = document.createElement("h2");
+          h2.innerText="So lonely here...";
+          h2.classList="sub-heading";
+          const h22 = document.createElement("h2");
+          h22.innerText="Please, Upload a Blog :(";
+          h22.classList="sub-heading";
+          document.querySelector("body").append(h2);
+          document.querySelector("body").append(h22);
+          document.querySelector("body").style.backgroundSize="cover";
+        }
+
+        authorPosts.forEach((val) => {
+          const div = document.createElement("div");
+          const h1 = document.createElement("h1");
+          const img = document.createElement("img");
+          const p = document.createElement("p");
+          const body = document.querySelector("body");
+          const removeBtn = document.createElement("button");
+          const updateBtn = document.createElement("button");
+          const btnDiv = document.createElement("div");
+          let tempP;
+          btnDiv.classList="remove-update";
+          div.classList="mainDiv";
+          h1.classList="blogTitle";
+
+          h1.innerText = val.title;
+          img.src = `data:image/jpeg;base64,${val.image}`;
+          p.innerHTML = val.article;
+          
+          removeBtn.textContent = "Remove";
+          btnDiv.append(removeBtn);
+          removeBtn.addEventListener("click", () => {
+            fetch("/removePost", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ title: val.title }),
+            });
+            div.remove();
+          });
+
+          updateBtn.textContent = "Update";
+          btnDiv.append(updateBtn);
+          updateBtn.addEventListener("click", () => {
+            fetch("/updatePost", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ title: val.title }),
+            })
+            .then((res)=>{
+              if(res.ok){
+                window.location.href="/update";
+              }
+            });
+          })
+          div.append(h1);
+          div.append(img);
+          div.append(btnDiv);
+          div.append(p);
+          body.append(div);
+        });
+      }
+
+      fetch("/getUser")
+        .then((res) => {
+          return res.json();
+        })
+        .then((user) => {
+          sayHello(user);
+          fetch("/getBlog")
+            .then((resBlog) => {
+              return resBlog.json();
+            })
+            .then((dataBlog) => {
+              console.log(dataBlog);
+              showBlogs(dataBlog, user);
+            });
+        });
+    </script>
+  </body>
+</html>

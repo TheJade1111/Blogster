@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/public/faviconUpload.png"> 
+    <style>
+        body{
+            background-size:cover;
+          }
+          .uploadHeading{
+            font-size: 80px;
+          }
+    </style>
+    <title>Upload Blog</title>
+</head>
+<body>
+    <h1 class="uploadHeading">Upload a Blog</h1>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+        <label for="title">Title: </label><input type="text" name="title">
+        <label for="article">Article: </label><input type="text" name="article">
+        <label for="image">Select an image: </label><input type="file" name="pic">
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>

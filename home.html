@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/public/favicon.png"> 
+</head>
+<body>
+    <h1 id="welcomeHeading" class="heading">Welcome to the Home Page</h1>
+    <h2 id="subText" class="sub-heading">Scroll to see all the blogs!</h2>
+    <script>
+          function showBlogs(dataBlog) {
+            let authorPosts=dataBlog;
+    
+            authorPosts.forEach((val) => {
+              const div = document.createElement("div");
+              const h1 = document.createElement("h1");
+              const img = document.createElement("img");
+              const p = document.createElement("p");
+              const body = document.querySelector("body");
+              let tempP;
+              div.classList="mainDiv";
+              h1.classList="blogTitle";
+    
+              h1.innerText = val.title;
+              img.src = `data:image/jpeg;base64,${val.image}`;
+              p.innerHTML = val.article;
+    
+              div.append(h1);
+              div.append(img);
+              div.append(p);
+              body.append(div);
+            });
+          }
+          fetch("/getBlog")
+                .then((resBlog) => {
+                  return resBlog.json();
+                })
+                .then((dataBlog) => {
+                  showBlogs(dataBlog);
+                });
+    </script>
+</body>
+</html>
